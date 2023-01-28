@@ -1,0 +1,176 @@
+% Initialise document like the way I did on the other tex file
+\documentclass{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\setlength{\parindent}{0pt}
+\begin{document}
+% Title
+\title{Lecture 2 notes}
+\date{}
+\maketitle
+% decrease gap between title and text
+\setlength{\parskip}{0.5em}
+\setlength{\parindent}{0pt}
+\section{Introduction}
+We prove some assertions made in lecture 2 that were left as exercises. 
+
+\section{Trace properties}
+% initialise theorems
+\newtheorem*{theorem}{Theorem}
+\newtheorem*{lemma}{Lemma}
+\newtheorem*{corollary}{Corollary}
+\newtheorem*{proposition}{Proposition}
+\newtheorem*{definition}{Definition}
+\newtheorem*{remark}{Remark}
+
+\begin{definition}
+The trace of a square matrix $A$ is defined as
+\begin{equation}
+\mathrm{tr}(A) = \sum_{i=1}^n a_{ii}.
+\end{equation}
+\end{definition}
+
+\begin{theorem}
+Let $f(A) = \mathrm{tr}(AB)$, where $A$ and $B$ are square matrices. Then
+\begin{equation}
+\triangledown_A f(A) = B^T.
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+We have 
+\begin{align}
+\triangledown_A f(A) &= \triangledown_A \mathrm{tr}(AB) \\
+&= \triangledown_A \sum_{i=1}^n \sum_{j=1}^n a_{ij} b_{ji} \\
+% create a matrix of the partial derivatives using partial derivative notation
+&= \begin{bmatrix}
+\frac{\partial}{\partial a_{11}} \sum_{i=1}^n \sum_{j=1}^n a_{ij} b_{ji} & \cdots & \frac{\partial}{\partial a_{1n}} \sum_{i=1}^n \sum_{j=1}^n a_{ij} b_{ji} \\
+\vdots & \ddots & \vdots \\
+\frac{\partial}{\partial a_{n1}} \sum_{i=1}^n \sum_{j=1}^n a_{ij} b_{ji} & \cdots & \frac{\partial}{\partial a_{nn}} \sum_{i=1}^n \sum_{j=1}^n a_{ij} b_{ji}
+\end{bmatrix} \\
+% use the fact that the partial derivative of a sum is the sum of the partial derivatives
+&= \begin{bmatrix}
+\frac{\partial}{\partial a_{11}} a_{11} b_{11} + \cdots + \frac{\partial}{\partial a_{11}} a_{n1} b_{1n} & \cdots & \frac{\partial}{\partial a_{1n}} a_{11} b_{11} + \cdots + \frac{\partial}{\partial a_{1n}} a_{n1} b_{1n} \\
+\vdots & \ddots & \vdots \\
+\frac{\partial}{\partial a_{n1}} a_{11} b_{11} + \cdots + \frac{\partial}{\partial a_{n1}} a_{n1} b_{1n} & \cdots & \frac{\partial}{\partial a_{nn}} a_{11} b_{11} + \cdots + \frac{\partial}{\partial a_{nn}} a_{n1} b_{1n}
+\end{bmatrix} \\
+% kill all the terms that don't have a_{ij} in them
+&= \begin{bmatrix}
+b_{11} & \cdots & b_{n1} \\
+\vdots & \ddots & \vdots \\
+b_{1n} & \cdots & b_{nn}
+\end{bmatrix} \\
+% transpose the matrix
+&= B^T.
+\end{align}
+\end{proof}
+
+% begin a remark but using the normal font rather than math font
+\begin{remark}
+Writing out proofs in this manner can become tedious. As a shorthand, we could have considered the
+matrix $\triangledown_A f(A)$ at an individual element, say $a_{mn}$, and observe that
+$\triangledown_A f(A)_{mn} = \frac{\partial}{\partial a_{mn}} f(A) = 
+\frac{\partial}{\partial a_{mn}} \sum_{i=1}^n \sum_{j=1}^n a_{ij} b_{ji} = b_{nm}$ and conclude that
+$\triangledown_A f(A) = B^T$. This style of argumentation shall be used going forward.
+\end{remark}
+
+\clearpage
+
+\begin{theorem}
+    % Tr(AB) = Tr(BA), write this in maths
+    Let $A$ and $B$ be square matrices. Then
+    \begin{equation}
+        \mathrm{tr}(AB) = \mathrm{tr}(BA).
+    \end{equation}
+\end{theorem}
+
+\begin{proof}
+    We have
+    \begin{align}
+        \mathrm{tr}(AB) &= \sum_{i=1}^n \sum_{j=1}^n a_{ij} b_{ji} \\
+        &= \sum_{i=1}^n \sum_{j=1}^n b_{ji} a_{ij} \\
+        &= \mathrm{tr}(BA).
+    \end{align}
+All we had to do was swap the order of summation on line 11, which is valid because the order of
+summation for finite sums does not matter.
+\end{proof}
+
+\begin{theorem}
+    % cyclic property of trace
+    Let $A$, $B$ and $C$ be square matrices. Then
+    \begin{equation}
+        \mathrm{tr}(ABC) = \mathrm{tr}(BCA) = \mathrm{tr}(CAB).
+    \end{equation}
+\end{theorem}
+
+\begin{proof}
+    % use index notation to write out the trace of ABC
+    We have
+    \begin{align}
+        \mathrm{tr}(ABC) &= \sum_{i=1}^n \sum_{j=1}^n \sum_{k=1}^n a_{ij} b_{jk} c_{ki} \\
+        &= \sum_{j=1}^n \sum_{k=1}^n \sum_{i=1}^n b_{jk} c_{ki} a_{ij} \\
+        &= \mathrm{tr}(BCA) 
+    \end{align}
+and a similar argument shows that $\mathrm{tr}(CAB) = \mathrm{tr}(BCA)$. 
+\end{proof}
+
+\begin{theorem}
+    % derivative of trace of A * A^T * C
+    Let $A$ and $C$ be square matrices. Then
+    \begin{equation}
+        \triangledown_A \mathrm{tr}(A A^T C) = CA + C^TA.
+    \end{equation}
+\end{theorem}
+
+% proof of the above theorem
+\begin{proof}
+Consider the space of $n \times n$ matricesand endow it 
+with the inner product $\langle A, B \rangle = \mathrm{tr}(AB^T)$. This is indeed an 
+inner product because, first and foremost it is symmetric:
+\begin{align}
+    \langle A, B \rangle &= \mathrm{tr}(AB^T) \\
+    &= \mathrm{tr}(BA^T) \\
+    &= \langle B, A \rangle
+\end{align}
+It is also linear in the first argument:
+\begin{align}
+    \langle \lambda A + \mu B, C \rangle &= \mathrm{tr}((\lambda A + \mu B) C^T) \\
+    &= \lambda \mathrm{tr}(AC^T) + \mu \mathrm{tr}(BC^T) \\
+    &= \lambda \langle A, C \rangle + \mu \langle B, C \rangle
+\end{align}
+Furthermore, it is positive definite:
+\begin{align}
+    \langle A, A \rangle &= \mathrm{tr}(AA^T) \\
+    &= \sum_{i=1}^n \sum_{j=1}^n a_{ij} a_{ij} \\
+    &\geq 0
+\end{align}
+
+For equality to be achieved on line 26, we must have $a_{ij} = 0$ for all $i$ and $j$, which is when 
+$A$ is the zero matrix. This completes the proof that $\langle A, B \rangle$ is an inner product on 
+the space of $n \times n$ matrices.\\
+
+% define functions f and g with domain and range in the space of matrices
+Let $f: \mathbb{R}^{n \times n} \rightarrow \mathbb{R}^{n \times n}$ be defined by $f(A) = A A^T$ and
+$g: \mathbb{R}^{n \times n} \rightarrow \mathbb{R}^{n \times n}$ be defined by $g(A) = A^T$. Then 
+$\triangledown_A \mathrm{tr}(A A^T C) = \triangledown_A \mathrm{tr}(C A A^T)$ by invariance
+of trace under cyclic permutations as previously established, and using the new notation
+$\triangledown_A \mathrm{tr}(C A A^T) = \triangledown_A \langle f(A), g(A) \rangle$.\\
+
+The reason why we are talking about inner products is because the result being asked to be shown
+holds true in a more general setting than just matrices. 
+In particular, if $f$ and $g$ are two linear maps from a vector
+space $V$ to itself, and $\langle \cdot, \cdot \rangle$ is an inner product on $V$, then
+$\triangledown_v \langle f(v), g(v) \rangle =  \langle \triangledown_v f(v), g(v) \rangle + 
+\langle f(v), \triangledown_v g(v) \rangle$.
+
+\end{proof}
+
+
+
+
+
+
+\end{document}
